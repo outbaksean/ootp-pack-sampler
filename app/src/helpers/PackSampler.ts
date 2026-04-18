@@ -1,7 +1,8 @@
 import type { PackCard } from "@/models/Card";
 import type { Tier } from "@/models/Tier";
-import { TIERS, TIER_WEIGHTS } from "@/models/Tier";
+import { TIERS, TIER_WEIGHTS, getCardTier } from "@/models/Tier";
 import type { PackDefinition } from "@/models/PackType";
+import type { SpotlightPackDefinition } from "@/models/SpotlightPackType";
 
 export interface DrawnCard {
   card: PackCard;
@@ -60,6 +61,44 @@ export function openPack(
     const card = drawCard(tier, isHistorical, cardsByTierAndType);
     if (card !== null) {
       result.push({ card, tier, isHistorical });
+    }
+  }
+
+  return result;
+}
+
+export function openSpotlightPack(
+  packDef: SpotlightPackDefinition,
+  cardsByCardId: Map<number, PackCard>,
+  cardsByTierAndType: Map<Tier, { live: PackCard[]; historical: PackCard[] }>,
+): DrawnCard[] {
+  const result: DrawnCard[] = [];
+
+  // 1 spotlight card from the weighted pool
+  const totalWeight = packDef.cards.reduce((s, c) => s + c.weight, 0);
+  const r = Math.random() * totalWeight;
+  let cumulative = 0;
+  for (const slot of packDef.cards) {
+    cumulative += slot.weight;
+    if (r < cumulative) {
+      const card = cardsByCardId.get(slot.cardId);
+      if (card) {
+        result.push({
+          card,
+          tier: getCardTier(card.cardValue),
+          isHistorical: card.cardType === "historical",
+        });
+      }
+      break;
+    }
+  }
+
+  // 5 historical cards at normal tier odds
+  for (let i = 0; i < 5; i++) {
+    const tier = drawRandomTier();
+    const card = drawCard(tier, true, cardsByTierAndType);
+    if (card !== null) {
+      result.push({ card, tier, isHistorical: true });
     }
   }
 

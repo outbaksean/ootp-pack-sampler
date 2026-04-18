@@ -23,7 +23,11 @@
 <script setup lang="ts">
 import { computed } from "vue";
 import { PACK_DEFINITIONS } from "@/models/PackType";
-import { packExpectedValue } from "@/helpers/expectedValue";
+import { SPOTLIGHT_PACK_DEFINITIONS } from "@/models/SpotlightPackType";
+import {
+  packExpectedValue,
+  spotlightPackExpectedValue,
+} from "@/helpers/expectedValue";
 import { useCardStore } from "@/stores/useCardStore";
 
 defineProps<{ modelValue: string }>();
@@ -36,10 +40,15 @@ function formatEv(n: number): string {
 }
 
 const evMap = computed(() => {
-  const map = cardStore.cardsByTierAndType;
-  return Object.fromEntries(
-    PACK_DEFINITIONS.map((p) => [p.key, packExpectedValue(p, map)]),
-  );
+  const tierMap = cardStore.cardsByTierAndType;
+  const cardIdMap = cardStore.cardsByCardId;
+  return Object.fromEntries([
+    ...PACK_DEFINITIONS.map((p) => [p.key, packExpectedValue(p, tierMap)]),
+    ...SPOTLIGHT_PACK_DEFINITIONS.map((p) => [
+      p.key,
+      spotlightPackExpectedValue(p, cardIdMap, tierMap),
+    ]),
+  ]);
 });
 
 const PACK_GROUPS = [
@@ -70,6 +79,10 @@ const PACK_GROUPS = [
         p.key,
       ),
     ),
+  },
+  {
+    label: "Spotlight",
+    packs: SPOTLIGHT_PACK_DEFINITIONS,
   },
 ];
 </script>

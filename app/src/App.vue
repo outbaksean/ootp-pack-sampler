@@ -6,21 +6,43 @@ import PackResult from "./components/PackResult.vue";
 import CalcDetailsModal from "./components/CalcDetailsModal.vue";
 import { useCardStore } from "./stores/useCardStore";
 import { PACK_DEFINITIONS } from "./models/PackType";
-import { openPack, type DrawnCard } from "./helpers/PackSampler";
+import { SPOTLIGHT_PACK_DEFINITIONS } from "./models/SpotlightPackType";
+import {
+  openPack,
+  openSpotlightPack,
+  type DrawnCard,
+} from "./helpers/PackSampler";
 
 const cardStore = useCardStore();
 
 const selectedPackKey = ref("standard");
 const lastResult = ref<DrawnCard[]>([]);
 
-const selectedPack = computed(
-  () =>
-    PACK_DEFINITIONS.find((p) => p.key === selectedPackKey.value) ??
-    PACK_DEFINITIONS[0],
-);
+const selectedPackLabel = computed(() => {
+  return (
+    PACK_DEFINITIONS.find((p) => p.key === selectedPackKey.value)?.label ??
+    SPOTLIGHT_PACK_DEFINITIONS.find((p) => p.key === selectedPackKey.value)
+      ?.label ??
+    PACK_DEFINITIONS[0].label
+  );
+});
 
 function handleOpenPack() {
-  lastResult.value = openPack(selectedPack.value, cardStore.cardsByTierAndType);
+  const spotlightPack = SPOTLIGHT_PACK_DEFINITIONS.find(
+    (p) => p.key === selectedPackKey.value,
+  );
+  if (spotlightPack) {
+    lastResult.value = openSpotlightPack(
+      spotlightPack,
+      cardStore.cardsByCardId,
+      cardStore.cardsByTierAndType,
+    );
+  } else {
+    const pack =
+      PACK_DEFINITIONS.find((p) => p.key === selectedPackKey.value) ??
+      PACK_DEFINITIONS[0];
+    lastResult.value = openPack(pack, cardStore.cardsByTierAndType);
+  }
 }
 
 const moonSvgUrl = "/ootp-missions-27/moon.svg";
@@ -98,7 +120,8 @@ async function handleDropZoneFileChange(e: Event) {
   </nav>
 
   <div class="disclaimer-banner">
-    Pack odds are based on my best understanding and are may be completely wrong.
+    Pack odds are based on my best understanding and are may be completely
+    wrong.
     <button class="banner-link" @click="calcDetailsOpen = true">
       Calculation Details
     </button>
@@ -119,7 +142,7 @@ async function handleDropZoneFileChange(e: Event) {
 
       <div class="sidebar-section">
         <button class="open-btn" @click="handleOpenPack">
-          Open {{ selectedPack.label }} Pack
+          Open {{ selectedPackLabel }} Pack
         </button>
       </div>
 
