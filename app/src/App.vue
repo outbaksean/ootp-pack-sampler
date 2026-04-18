@@ -112,10 +112,15 @@ async function handleDropZoneFileChange(e: Event) {
 
 <template>
   <nav class="app-nav">
-    <a href="https://cratervar.com" class="home-link">
-      <img :src="moonSvgUrl" alt="cratervar" class="home-icon" />
-      cratervar.com
-    </a>
+    <div class="nav-links">
+      <a href="https://cratervar.com" class="home-link">
+        <img :src="moonSvgUrl" alt="cratervar" class="home-icon" />
+        cratervar.com
+      </a>
+      <a href="https://cratervar.com/ootp-missions-27/" class="nav-link">
+        OOTP Missions
+      </a>
+    </div>
     <span class="app-title">OOTP Pack Sampler</span>
   </nav>
 
@@ -235,6 +240,12 @@ async function handleDropZoneFileChange(e: Event) {
   flex-shrink: 0;
 }
 
+.nav-links {
+  display: inline-flex;
+  align-items: center;
+  gap: 1.25rem;
+}
+
 .home-link {
   display: inline-flex;
   align-items: center;
@@ -247,6 +258,17 @@ async function handleDropZoneFileChange(e: Event) {
 .home-icon {
   width: 16px;
   height: 16px;
+}
+
+.nav-link {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: #1e293b;
+  text-decoration: none;
+}
+
+.nav-link:hover {
+  color: #22c55e;
 }
 
 .app-title {
