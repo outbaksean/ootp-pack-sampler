@@ -2,6 +2,7 @@ import type { PackCard } from "@/models/Card";
 import type { Tier } from "@/models/Tier";
 import { TIERS, TIER_WEIGHTS } from "@/models/Tier";
 import type { PackDefinition } from "@/models/PackType";
+import type { SpotlightPackDefinition } from "@/models/SpotlightPackType";
 
 function avgL10(cards: PackCard[]): number {
   const priced = cards.filter((c) => c.lastPrice > 0);
@@ -31,6 +32,30 @@ function slotEV(
     ev += TIER_WEIGHTS[tier] * tierAvg;
   }
   return ev;
+}
+
+export function spotlightPackExpectedValue(
+  packDef: SpotlightPackDefinition,
+  cardsByCardId: Map<number, PackCard>,
+  cardsByTierAndType: Map<Tier, { live: PackCard[]; historical: PackCard[] }>,
+): number {
+  const totalWeight = packDef.cards.reduce((s, c) => s + c.weight, 0);
+  let spotlightEV = 0;
+  for (const slot of packDef.cards) {
+    const card = cardsByCardId.get(slot.cardId);
+    if (card && card.lastPrice > 0) {
+      spotlightEV += (slot.weight / totalWeight) * card.lastPrice;
+    }
+  }
+
+  let historicalSlotEV = 0;
+  for (const tier of TIERS) {
+    const bucket = cardsByTierAndType.get(tier);
+    if (!bucket) continue;
+    historicalSlotEV += TIER_WEIGHTS[tier] * avgL10(bucket.historical);
+  }
+
+  return spotlightEV + 5 * historicalSlotEV;
 }
 
 export function packExpectedValue(

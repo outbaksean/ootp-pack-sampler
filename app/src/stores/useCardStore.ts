@@ -49,6 +49,14 @@ export const useCardStore = defineStore("card", () => {
 
   const hasCards = computed(() => packCards.value.length > 0);
 
+  const cardsByCardId = computed(() => {
+    const map = new Map<number, PackCard>();
+    for (const card of packCards.value) {
+      map.set(card.cardId, card);
+    }
+    return map;
+  });
+
   const cardsByTierAndType = computed(() => {
     const map = new Map<Tier, { live: PackCard[]; historical: PackCard[] }>();
     for (const card of packCards.value) {
@@ -137,6 +145,7 @@ export const useCardStore = defineStore("card", () => {
     hasCards,
     isDefaultData,
     lastUploadedAt,
+    cardsByCardId,
     cardsByTierAndType,
     uploadShopFile,
     clearShopCards,
