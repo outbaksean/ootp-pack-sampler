@@ -13,7 +13,7 @@ Live at [cratervar.com/ootp-pack-sampler](https://cratervar.com/ootp-pack-sample
 
 ## Pack odds disclaimer
 
-Pack odds are based on my best understanding of the game and are not confirmed by the developers. See the Calculation Details link in the app for a full explanation of how pack output and expected value are calculated.
+Pack odds are based on my best understanding of the game and may be completely wrong. See the Calculation Details link in the app for a full explanation of how pack output and expected value are calculated.
 
 ## Card data
 

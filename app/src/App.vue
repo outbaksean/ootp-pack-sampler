@@ -98,8 +98,7 @@ async function handleDropZoneFileChange(e: Event) {
   </nav>
 
   <div class="disclaimer-banner">
-    Pack odds are based on my best understanding and are not confirmed by the
-    developers.
+    Pack odds are based on my best understanding and are may be completely wrong.
     <button class="banner-link" @click="calcDetailsOpen = true">
       Calculation Details
     </button>
