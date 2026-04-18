@@ -1,7 +1,7 @@
 <template>
   <div class="pack-result">
     <div v-if="cards.length === 0" class="empty-state">
-      Select a pack type and click Open Pack to simulate a pull.
+      Select a pack type and click Open Pack to simulate opening one.
     </div>
     <div v-else>
       <div v-if="!cardStore.isDefaultData" class="result-header">
