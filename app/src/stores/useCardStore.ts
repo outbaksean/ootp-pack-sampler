@@ -117,6 +117,7 @@ export const useCardStore = defineStore("card", () => {
     if (packCards.value.length > 0) return;
     try {
       const response = await fetch("/ootp-missions-27/data/shop_cards.csv");
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
       const text = await response.text();
       await new Promise<void>((resolve) => {
         Papa.parse(text, {
