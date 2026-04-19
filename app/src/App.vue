@@ -145,12 +145,6 @@ async function handleDropZoneFileChange(e: Event) {
         <PackSelector v-model="selectedPackKey" />
       </div>
 
-      <div class="sidebar-section">
-        <button class="open-btn" @click="handleOpenPack">
-          Open {{ selectedPackLabel }} Pack
-        </button>
-      </div>
-
       <div class="sidebar-spacer" />
     </aside>
 
@@ -216,6 +210,10 @@ async function handleDropZoneFileChange(e: Event) {
           />
         </div>
       </template>
+
+      <button class="open-btn" @click="handleOpenPack">
+        Open {{ selectedPackLabel }} Pack
+      </button>
 
       <PackResult :cards="lastResult" />
     </div>
@@ -385,23 +383,20 @@ async function handleDropZoneFileChange(e: Event) {
 
 /* ── Open Pack button ── */
 .open-btn {
-  background: rgba(34, 197, 94, 0.15);
-  color: #86efac;
-  border: 1px solid #4ade80;
-  border-radius: 6px;
-  padding: 8px 12px;
-  font-size: 0.83rem;
-  font-weight: 500;
+  background: #16a34a;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 14px 32px;
+  font-size: 1.1rem;
+  font-weight: 600;
   cursor: pointer;
-  width: 100%;
-  transition:
-    background 0.15s,
-    color 0.15s;
+  align-self: center;
+  transition: background 0.15s;
 }
 
 .open-btn:hover {
-  background: rgba(34, 197, 94, 0.25);
-  color: #bbf7d0;
+  background: #15803d;
 }
 
 /* ── Main area ── */
